@@ -12,3 +12,7 @@ PRODUCT_BUNDLE_IDENTIFIER = com.notetoself.noteToSelf
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 com.notetoself. All rights reserved.
+
+// Required for speech_to_text (TCC will abort without these in the built Info.plist)
+INFOPLIST_KEY_NSMicrophoneUsageDescription = Note to Self uses the microphone to turn your speech into text notes.
+INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = Note to Self uses speech recognition to capture your thoughts as text.
