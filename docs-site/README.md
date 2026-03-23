@@ -11,3 +11,5 @@ Public pages:
 - https://seanebones-lang.github.io/Note-to-Sef/privacy-policy.html
 - https://seanebones-lang.github.io/Note-to-Sef/eula.html
 - https://seanebones-lang.github.io/Note-to-Sef/support-policy.html
+
+Deployment trigger: 2026-03-23
