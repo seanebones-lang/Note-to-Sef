@@ -2,6 +2,10 @@
 
 Use this checklist for production submissions to Apple and Google.
 
+Related template:
+
+- `docs/release/STORE_METADATA_TEMPLATE.md`
+
 ## Identity and Versioning
 
 - [ ] Confirm app IDs:
