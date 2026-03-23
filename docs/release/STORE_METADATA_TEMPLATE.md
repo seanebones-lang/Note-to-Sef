@@ -121,6 +121,39 @@ Built for focus
 - Bug fixes and stability improvements.
 - Updated onboarding and permissions messaging.`
 
+## Ready-to-Paste Release Copy
+
+### Version 1.0.0 Launch (iOS + Android)
+
+Use this for initial launch notes:
+
+`Welcome to Note to Self 1.0.0.
+
+- Fast local-first note capture.
+- Organize with inbox, categories, and tags.
+- Full-text search across your notes.
+- Optional speech capture for quick dictation.
+- Archive and pin workflow for daily triage.`
+
+### Version 1.0.1 Update (iOS + Android)
+
+Use this for your first update:
+
+`Note to Self 1.0.1 includes quality improvements.
+
+- Better stability and reliability.
+- Polished note editing and category assignment flow.
+- Improved release readiness for iOS, Android, and desktop distribution.
+- Minor UI and performance refinements.`
+
+### Apple "What's New in This Version" (short option)
+
+`Bug fixes and stability improvements across note editing, organization, and search.`
+
+### Google Play "What's New" (short option)
+
+`Performance improvements, bug fixes, and smoother note organization workflows.`
+
 ## Final Pre-Submit Checks
 
 - Verify metadata text matches actual app behavior.
