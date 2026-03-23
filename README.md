@@ -9,6 +9,7 @@ Cross-platform thought capture and note organization app built with Flutter.
 - Support Policy: `docs/legal/SUPPORT_POLICY.md`
 - Store Submission Checklist: `docs/release/STORE_SUBMISSION_CHECKLIST.md`
 - Store Metadata Template: `docs/release/STORE_METADATA_TEMPLATE.md`
+- Store Submission Packet v1: `docs/release/STORE_SUBMISSION_PACKET_V1.md`
 - Public legal docs site: `https://seanebones-lang.github.io/Note-to-Sef/`
 
 ## Development

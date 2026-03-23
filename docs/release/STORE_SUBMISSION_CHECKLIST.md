@@ -5,6 +5,7 @@ Use this checklist for production submissions to Apple and Google.
 Related template:
 
 - `docs/release/STORE_METADATA_TEMPLATE.md`
+- `docs/release/STORE_SUBMISSION_PACKET_V1.md`
 
 ## Identity and Versioning
 
