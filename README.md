@@ -8,6 +8,7 @@ Cross-platform thought capture and note organization app built with Flutter.
 - EULA: `docs/legal/EULA.md`
 - Support Policy: `docs/legal/SUPPORT_POLICY.md`
 - Store Submission Checklist: `docs/release/STORE_SUBMISSION_CHECKLIST.md`
+- Public legal docs site: `https://seanebones-lang.github.io/Note-to-Sef/`
 
 ## Development
 
