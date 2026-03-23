@@ -1,17 +1,14 @@
-# note_to_self
+# Note to Self
 
-A new Flutter project.
+Cross-platform thought capture and note organization app built with Flutter.
 
-## Getting Started
+## Production Docs
 
-This project is a starting point for a Flutter application.
+- Privacy Policy: `docs/legal/PRIVACY_POLICY.md`
+- EULA: `docs/legal/EULA.md`
+- Support Policy: `docs/legal/SUPPORT_POLICY.md`
+- Store Submission Checklist: `docs/release/STORE_SUBMISSION_CHECKLIST.md`
 
-A few resources to get you started if this is your first Flutter project:
+## Development
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter docs: https://docs.flutter.dev/
