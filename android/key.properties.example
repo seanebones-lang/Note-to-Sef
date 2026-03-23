@@ -1,0 +1,11 @@
+# Copy this file to: android/key.properties (gitignored — never commit it)
+#
+# Use your real keystore path. Absolute paths work. You may also use ~/file.jks
+# (Gradle expands ~). Example for a keystore in your home folder:
+#
+# storeFile=/Users/nexteleven/upload-keystore.jks
+#
+storePassword=YOUR_KEYSTORE_PASSWORD
+keyPassword=YOUR_KEY_PASSWORD
+keyAlias=upload
+storeFile=/Users/YOU/upload-keystore.jks

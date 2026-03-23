@@ -1,0 +1,52 @@
+# Fastlane uploads (run from repo root: cd fastlane && bundle exec fastlane <lane>).
+# iOS: Uses local IPA; Xcode/Transporter auth often comes from Keychain if you're signed into Xcode.
+# Play: Set PLAY_CONSOLE_JSON_KEY to your service account JSON path (create in Play Console → API access).
+
+default_platform(:ios)
+
+def flutter_root
+  File.expand_path("..", __dir__)
+end
+
+def ipa_path
+  Dir.glob(File.join(flutter_root, "build", "ios", "ipa", "*.ipa")).first
+end
+
+def aab_path
+  File.join(flutter_root, "build", "app", "outputs", "bundle", "release", "app-release.aab")
+end
+
+platform :ios do
+  desc "Upload existing IPA to App Store Connect (TestFlight / metadata only; does not submit for review)"
+  lane :upload_ipa do
+    path = ipa_path
+    UI.user_error!("No IPA in build/ios/ipa/. Run: ./tool/store_release.sh") unless path && File.exist?(path)
+
+    upload_to_app_store(
+      ipa: path,
+      skip_metadata: true,
+      skip_screenshots: true,
+      run_precheck_before_submit: false,
+      submit_for_review: false,
+      automatic_release: false
+    )
+  end
+end
+
+platform :android do
+  desc "Upload existing AAB to internal testing track"
+  lane :upload_aab do
+    json = ENV["PLAY_CONSOLE_JSON_KEY"]
+    UI.user_error!("Set PLAY_CONSOLE_JSON_KEY to your Play Console API JSON path") if json.nil? || json.empty?
+    UI.user_error!("No AAB at #{aab_path}") unless File.exist?(aab_path)
+
+    upload_to_play_store(
+      json_key: json,
+      track: "internal",
+      aab: aab_path,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end

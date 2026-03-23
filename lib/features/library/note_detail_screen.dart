@@ -30,7 +30,11 @@ class NoteDetailScreen extends ConsumerWidget {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(mode == 'json' ? 'Saved note JSON copied' : 'Saved note Markdown copied'),
+          content: Text(
+            mode == 'json'
+                ? 'Saved note JSON copied'
+                : 'Saved note Markdown copied',
+          ),
         ),
       );
     }

@@ -1,4 +1,4 @@
-package com.notetoself.note_to_self
+package online.nextelevenstudios.notetoself
 
 import io.flutter.embedding.android.FlutterActivity
 

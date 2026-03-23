@@ -151,7 +151,11 @@ class _CaptureScreenState extends ConsumerState<CaptureScreen> {
               actions: [
                 TextButton(
                   onPressed: () => unawaited(_save()),
-                  child: Text(Platform.isMacOS || Platform.isIOS ? 'Save  ⌘S' : 'Save  Ctrl+S'),
+                  child: Text(
+                    Platform.isMacOS || Platform.isIOS
+                        ? 'Save  ⌘S'
+                        : 'Save  Ctrl+S',
+                  ),
                 ),
               ],
             ),
@@ -179,7 +183,9 @@ class _CaptureScreenState extends ConsumerState<CaptureScreen> {
                     const Spacer(),
                     if (!_speechAvailable)
                       Text(
-                        Platform.isMacOS || Platform.isLinux || Platform.isWindows
+                        Platform.isMacOS ||
+                                Platform.isLinux ||
+                                Platform.isWindows
                             ? 'Speech may be limited on desktop'
                             : 'Speech unavailable',
                         style: theme.textTheme.labelSmall?.copyWith(
@@ -196,7 +202,10 @@ class _CaptureScreenState extends ConsumerState<CaptureScreen> {
                 if (_speechStatus.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
-                    child: Text(_speechStatus, style: theme.textTheme.labelSmall),
+                    child: Text(
+                      _speechStatus,
+                      style: theme.textTheme.labelSmall,
+                    ),
                   ),
                 TextField(
                   controller: _bodyController,

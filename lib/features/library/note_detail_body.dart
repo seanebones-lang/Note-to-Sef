@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,11 +13,7 @@ import '../../utils/debouncer.dart';
 
 /// Shared editor for a note (full screen or split-pane).
 class NoteDetailBody extends ConsumerStatefulWidget {
-  const NoteDetailBody({
-    super.key,
-    required this.noteId,
-    this.onDeleted,
-  });
+  const NoteDetailBody({super.key, required this.noteId, this.onDeleted});
 
   final int noteId;
   final VoidCallback? onDeleted;
@@ -65,7 +62,12 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
     final repo = ref.read(notesRepositoryProvider);
     unawaited(
       repo
-          .updateNote(id: id, title: titleText, body: bodyText, categoryId: cat)
+          .updateNote(
+            id: id,
+            title: titleText,
+            body: bodyText,
+            categoryId: Value(cat),
+          )
           .then((_) => repo.setNoteTags(id, tags)),
     );
     _title.dispose();
@@ -101,15 +103,15 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
         id: widget.noteId,
         title: _title.text.trim().isEmpty ? null : _title.text.trim(),
         body: _body.text,
-        categoryId: _categoryId,
+        categoryId: Value(_categoryId),
       );
       await repo.setNoteTags(widget.noteId, _selectedTagIds.toList());
     } catch (e, st) {
       debugPrint('Note save failed: $e\n$st');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not save: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not save: $e')));
       }
     }
   }
@@ -197,9 +199,9 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
     );
     await Clipboard.setData(ClipboardData(text: json));
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('JSON copied to clipboard')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('JSON copied to clipboard')));
     }
   }
 
@@ -221,12 +223,18 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 children: [
-                  Icon(Icons.archive_outlined, size: 20, color: theme.colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.archive_outlined,
+                    size: 20,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Archived — hidden from the main list unless you include archived notes.',
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
                   TextButton(
@@ -295,7 +303,12 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
                     value: 'archive',
                     child: Row(
                       children: [
-                        Icon(_archived ? Icons.unarchive_outlined : Icons.archive_outlined, size: 20),
+                        Icon(
+                          _archived
+                              ? Icons.unarchive_outlined
+                              : Icons.archive_outlined,
+                          size: 20,
+                        ),
                         const SizedBox(width: 12),
                         Text(_archived ? 'Restore from archive' : 'Archive'),
                       ],
@@ -323,8 +336,14 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
                       title: const Text('Delete note?'),
                       content: const Text('This cannot be undone.'),
                       actions: [
-                        TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Cancel')),
-                        FilledButton(onPressed: () => Navigator.pop(c, true), child: const Text('Delete')),
+                        TextButton(
+                          onPressed: () => Navigator.pop(c, false),
+                          child: const Text('Cancel'),
+                        ),
+                        FilledButton(
+                          onPressed: () => Navigator.pop(c, true),
+                          child: const Text('Delete'),
+                        ),
                       ],
                     ),
                   );
@@ -344,7 +363,8 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
             items: [
               const DropdownMenuItem<int?>(value: null, child: Text('None')),
               ..._categories.map(
-                (Category c) => DropdownMenuItem<int?>(value: c.id, child: Text(c.name)),
+                (Category c) =>
+                    DropdownMenuItem<int?>(value: c.id, child: Text(c.name)),
               ),
             ],
             onChanged: (v) {
@@ -375,7 +395,10 @@ class _NoteDetailBodyState extends ConsumerState<NoteDetailBody> {
                       _selectedTagIds.add(id);
                       _allTags = tags;
                     });
-                    await repo.setNoteTags(widget.noteId, _selectedTagIds.toList());
+                    await repo.setNoteTags(
+                      widget.noteId,
+                      _selectedTagIds.toList(),
+                    );
                   },
                 ),
               ),

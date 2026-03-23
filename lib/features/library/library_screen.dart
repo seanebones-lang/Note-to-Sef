@@ -63,7 +63,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
   }
 
   bool get _hasActiveFilters =>
-      _debouncedQuery.isNotEmpty || _categoryFilter != null || _tagFilter != null || _includeArchived;
+      _debouncedQuery.isNotEmpty ||
+      _categoryFilter != null ||
+      _tagFilter != null ||
+      _includeArchived;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +103,9 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                         icon: const Icon(Icons.clear),
                         onPressed: _clearSearch,
                       ),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 isDense: true,
               ),
               onChanged: (v) {
@@ -140,7 +145,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
           if (items.isEmpty) {
             return _hasActiveFilters
                 ? _EmptyFiltered(theme: theme)
-                : _EmptyLibrary(onNew: () => context.push('/capture'), theme: theme);
+                : _EmptyLibrary(
+                    onNew: () => context.push('/capture'),
+                    theme: theme,
+                  );
           }
 
           final list = ListView.builder(
@@ -149,12 +157,18 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
             itemBuilder: (context, i) {
               final nv = items[i];
               final n = nv.note;
-              final preview = n.body.trim().isEmpty ? (n.title ?? 'Empty note') : n.body.trim();
-              final short = preview.length > 120 ? '${preview.substring(0, 120)}…' : preview;
+              final preview = n.body.trim().isEmpty
+                  ? (n.title ?? 'Empty note')
+                  : n.body.trim();
+              final short = preview.length > 120
+                  ? '${preview.substring(0, 120)}…'
+                  : preview;
               final df = DateFormat.yMMMd().add_jm();
               final tile = Material(
                 color: wide && _selectedId == n.id
-                    ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
+                    ? theme.colorScheme.surfaceContainerHighest.withValues(
+                        alpha: 0.5,
+                      )
                     : null,
                 child: ListTile(
                   selected: wide && _selectedId == n.id,
@@ -163,9 +177,17 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             if (n.archived)
-                              Icon(Icons.archive_outlined, size: 18, color: theme.colorScheme.outline),
+                              Icon(
+                                Icons.archive_outlined,
+                                size: 18,
+                                color: theme.colorScheme.outline,
+                              ),
                             if (n.pinned)
-                              Icon(Icons.push_pin, size: 20, color: theme.colorScheme.primary),
+                              Icon(
+                                Icons.push_pin,
+                                size: 20,
+                                color: theme.colorScheme.primary,
+                              ),
                           ],
                         )
                       : null,
@@ -174,15 +196,19 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  subtitle: Text(short, maxLines: 2, overflow: TextOverflow.ellipsis),
-                  trailing: Text(df.format(n.updatedAt), style: theme.textTheme.labelSmall),
+                  subtitle: Text(
+                    short,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Text(
+                    df.format(n.updatedAt),
+                    style: theme.textTheme.labelSmall,
+                  ),
                   onTap: () => _openNote(n.id, wide),
                 ),
               );
-              return Opacity(
-                opacity: n.archived ? 0.72 : 1,
-                child: tile,
-              );
+              return Opacity(opacity: n.archived ? 0.72 : 1, child: tile);
             },
           );
 
@@ -279,14 +305,19 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       builder: (c) {
         return SafeArea(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(c).height * 0.6),
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.sizeOf(c).height * 0.6,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text('Categories', style: Theme.of(c).textTheme.titleMedium),
+                  child: Text(
+                    'Categories',
+                    style: Theme.of(c).textTheme.titleMedium,
+                  ),
                 ),
                 Flexible(
                   child: ListView(
@@ -328,7 +359,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     );
   }
 
-  Future<String?> _promptText(BuildContext context, {required String title}) async {
+  Future<String?> _promptText(
+    BuildContext context, {
+    required String title,
+  }) async {
     final controller = TextEditingController();
     final result = await showDialog<String>(
       context: context,
@@ -336,8 +370,14 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
         title: Text(title),
         content: TextField(controller: controller, autofocus: true),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(c), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(c, controller.text.trim()), child: const Text('OK')),
+          TextButton(
+            onPressed: () => Navigator.pop(c),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(c, controller.text.trim()),
+            child: const Text('OK'),
+          ),
         ],
       ),
     );
@@ -368,7 +408,9 @@ class _EmptyLibrary extends StatelessWidget {
             Text(
               'Capture a thought with your voice or the keyboard.',
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge?.copyWith(color: cs.onSurfaceVariant),
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 28),
             FilledButton.icon(
@@ -399,15 +441,14 @@ class _EmptyFiltered extends StatelessWidget {
           children: [
             Icon(Icons.search_off, size: 56, color: cs.outline),
             const SizedBox(height: 16),
-            Text(
-              'No matches',
-              style: theme.textTheme.titleLarge,
-            ),
+            Text('No matches', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             Text(
               'Try different words or clear filters.',
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
             ),
           ],
         ),
@@ -429,7 +470,11 @@ class _SelectNoteHint extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.touch_app_outlined, size: 48, color: theme.colorScheme.outline),
+            Icon(
+              Icons.touch_app_outlined,
+              size: 48,
+              color: theme.colorScheme.outline,
+            ),
             const SizedBox(height: 12),
             Text(
               'Select a note',

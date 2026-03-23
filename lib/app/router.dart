@@ -23,9 +23,8 @@ GoRouter createRouter() {
             routes: [
               GoRoute(
                 path: '/library',
-                pageBuilder: (context, state) => const NoTransitionPage<void>(
-                  child: LibraryScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage<void>(child: LibraryScreen()),
               ),
             ],
           ),
@@ -33,9 +32,8 @@ GoRouter createRouter() {
             routes: [
               GoRoute(
                 path: '/inbox',
-                pageBuilder: (context, state) => const NoTransitionPage<void>(
-                  child: InboxScreen(),
-                ),
+                pageBuilder: (context, state) =>
+                    const NoTransitionPage<void>(child: InboxScreen()),
               ),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,12 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
         stream: repo.watchNotes(inboxOnly: true),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('Could not load inbox.\n${snapshot.error}', textAlign: TextAlign.center));
+            return Center(
+              child: Text(
+                'Could not load inbox.\n${snapshot.error}',
+                textAlign: TextAlign.center,
+              ),
+            );
           }
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
@@ -56,12 +62,17 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                   children: [
                     Icon(Icons.inbox_outlined, size: 72, color: cs.outline),
                     const SizedBox(height: 16),
-                    Text('Inbox is clear', style: theme.textTheme.headlineSmall),
+                    Text(
+                      'Inbox is clear',
+                      style: theme.textTheme.headlineSmall,
+                    ),
                     const SizedBox(height: 8),
                     Text(
                       'New captures land here when you choose “Send to inbox”.',
                       textAlign: TextAlign.center,
-                      style: theme.textTheme.bodyLarge?.copyWith(color: cs.onSurfaceVariant),
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        color: cs.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ),
@@ -75,14 +86,25 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
             itemBuilder: (context, i) {
               final nv = items[i];
               final n = nv.note;
-              final preview = n.body.trim().isEmpty ? (n.title ?? 'Empty') : n.body.trim();
-              final short = preview.length > 100 ? '${preview.substring(0, 100)}…' : preview;
+              final preview = n.body.trim().isEmpty
+                  ? (n.title ?? 'Empty')
+                  : n.body.trim();
+              final short = preview.length > 100
+                  ? '${preview.substring(0, 100)}…'
+                  : preview;
               return Card(
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 child: ExpansionTile(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  title: Text(n.title?.isNotEmpty == true ? n.title! : 'Untitled'),
-                  subtitle: Text('$short\n${df.format(n.updatedAt)}', maxLines: 3),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  title: Text(
+                    n.title?.isNotEmpty == true ? n.title! : 'Untitled',
+                  ),
+                  subtitle: Text(
+                    '$short\n${df.format(n.updatedAt)}',
+                    maxLines: 3,
+                  ),
                   children: [
                     ListTile(
                       leading: const Icon(Icons.check_circle_outline),
@@ -129,14 +151,19 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
       builder: (c) {
         return SafeArea(
           child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(c).height * 0.55),
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.sizeOf(c).height * 0.55,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text('Category', style: Theme.of(c).textTheme.titleMedium),
+                  child: Text(
+                    'Category',
+                    style: Theme.of(c).textTheme.titleMedium,
+                  ),
                 ),
                 Flexible(
                   child: ListView(
@@ -145,7 +172,10 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                       ListTile(
                         title: const Text('Clear category'),
                         onTap: () async {
-                          await repo.updateNote(id: noteId, categoryId: null);
+                          await repo.updateNote(
+                            id: noteId,
+                            categoryId: const Value(null),
+                          );
                           if (c.mounted) Navigator.pop(c);
                           setState(() {});
                         },
@@ -154,7 +184,10 @@ class _InboxScreenState extends ConsumerState<InboxScreen> {
                         (cat) => ListTile(
                           title: Text(cat.name),
                           onTap: () async {
-                            await repo.updateNote(id: noteId, categoryId: cat.id);
+                            await repo.updateNote(
+                              id: noteId,
+                              categoryId: Value(cat.id),
+                            );
                             if (c.mounted) Navigator.pop(c);
                             setState(() {});
                           },

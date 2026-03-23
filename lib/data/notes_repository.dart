@@ -6,11 +6,7 @@ import 'database.dart';
 
 /// User-facing view combining a note with category and tags.
 class NoteView {
-  NoteView({
-    required this.note,
-    this.category,
-    required this.tags,
-  });
+  NoteView({required this.note, this.category, required this.tags});
 
   final Note note;
   final Category? category;
@@ -92,7 +88,10 @@ class NotesRepository {
 
   /// FTS5-safe: prefix match per token.
   static String ftsMatchQuery(String raw) {
-    final cleaned = raw.trim().replaceAll('"', ' ').replaceAll(RegExp(r'\s+'), ' ');
+    final cleaned = raw
+        .trim()
+        .replaceAll('"', ' ')
+        .replaceAll(RegExp(r'\s+'), ' ');
     if (cleaned.isEmpty) return '';
     return cleaned
         .split(' ')
@@ -108,7 +107,9 @@ class NotesRepository {
     int? categoryId,
   }) {
     final now = DateTime.now();
-    return _db.into(_db.notes).insert(
+    return _db
+        .into(_db.notes)
+        .insert(
           NotesCompanion.insert(
             title: Value(title),
             body: Value(body),
@@ -127,7 +128,9 @@ class NotesRepository {
     bool? inInbox,
     bool? pinned,
     bool? archived,
-    int? categoryId,
+
+    /// Use [Value.absent()] to leave category unchanged, [Value(null)] to clear.
+    Value<int?> categoryId = const Value.absent(),
   }) async {
     await (_db.update(_db.notes)..where((n) => n.id.equals(id))).write(
       NotesCompanion(
@@ -136,7 +139,7 @@ class NotesRepository {
         inInbox: inInbox != null ? Value(inInbox) : const Value.absent(),
         pinned: pinned != null ? Value(pinned) : const Value.absent(),
         archived: archived != null ? Value(archived) : const Value.absent(),
-        categoryId: categoryId != null ? Value(categoryId) : const Value.absent(),
+        categoryId: categoryId,
         updatedAt: Value(DateTime.now()),
       ),
     );
@@ -147,7 +150,9 @@ class NotesRepository {
   }
 
   Future<Note?> getNote(int id) {
-    return (_db.select(_db.notes)..where((n) => n.id.equals(id))).getSingleOrNull();
+    return (_db.select(
+      _db.notes,
+    )..where((n) => n.id.equals(id))).getSingleOrNull();
   }
 
   Future<List<Tag>> tagsForNote(int noteId) => _tagsForNote(noteId);
@@ -197,7 +202,9 @@ class NotesRepository {
       );
 
       if (tagIdFilter != null) {
-        notes = notes.where((nv) => nv.tags.any((t) => t.id == tagIdFilter)).toList();
+        notes = notes
+            .where((nv) => nv.tags.any((t) => t.id == tagIdFilter))
+            .toList();
       }
 
       if (ftsQuery != null && ftsQuery.trim().isNotEmpty) {
@@ -212,51 +219,55 @@ class NotesRepository {
   }
 
   Future<List<int>> _searchNoteIdsFts(String matchQuery) async {
-    final rows = await _db.customSelect(
-      'SELECT rowid AS id FROM notes_fts WHERE notes_fts MATCH ?',
-      variables: [Variable<String>(matchQuery)],
-      readsFrom: {_db.notes},
-    ).get();
+    final rows = await _db
+        .customSelect(
+          'SELECT rowid AS id FROM notes_fts WHERE notes_fts MATCH ?',
+          variables: [Variable<String>(matchQuery)],
+          readsFrom: {_db.notes},
+        )
+        .get();
     return rows.map((r) => r.read<int>('id')).toList();
   }
 
   Future<List<Tag>> _tagsForNote(int noteId) async {
     final q = _db.select(_db.tags).join([
-      innerJoin(
-        _db.noteTags,
-        _db.noteTags.tagId.equalsExp(_db.tags.id),
-      ),
-    ])
-      ..where(_db.noteTags.noteId.equals(noteId));
+      innerJoin(_db.noteTags, _db.noteTags.tagId.equalsExp(_db.tags.id)),
+    ])..where(_db.noteTags.noteId.equals(noteId));
     final rows = await q.get();
     return rows.map((r) => r.readTable(_db.tags)).toList();
   }
 
   Future<List<Tag>> allTags() {
-    return (_db.select(_db.tags)..orderBy([(t) => OrderingTerm.asc(t.name)])).get();
+    return (_db.select(
+      _db.tags,
+    )..orderBy([(t) => OrderingTerm.asc(t.name)])).get();
   }
 
   Stream<List<Tag>> watchTags() {
-    return (_db.select(_db.tags)..orderBy([(t) => OrderingTerm.asc(t.name)])).watch();
+    return (_db.select(
+      _db.tags,
+    )..orderBy([(t) => OrderingTerm.asc(t.name)])).watch();
   }
 
   Future<int> ensureTag(String name) async {
     final trimmed = name.trim();
     if (trimmed.isEmpty) throw ArgumentError('Tag name empty');
-    final existing = await (_db.select(_db.tags)
-          ..where((t) => t.name.equals(trimmed)))
-        .getSingleOrNull();
+    final existing = await (_db.select(
+      _db.tags,
+    )..where((t) => t.name.equals(trimmed))).getSingleOrNull();
     if (existing != null) return existing.id;
-    return _db.into(_db.tags).insert(
-          TagsCompanion.insert(name: trimmed),
-        );
+    return _db.into(_db.tags).insert(TagsCompanion.insert(name: trimmed));
   }
 
   Future<void> setNoteTags(int noteId, List<int> tagIds) async {
     await _db.transaction(() async {
-      await (_db.delete(_db.noteTags)..where((nt) => nt.noteId.equals(noteId))).go();
+      await (_db.delete(
+        _db.noteTags,
+      )..where((nt) => nt.noteId.equals(noteId))).go();
       for (final tid in tagIds) {
-        await _db.into(_db.noteTags).insert(
+        await _db
+            .into(_db.noteTags)
+            .insert(
               NoteTagsCompanion.insert(noteId: noteId, tagId: tid),
               mode: InsertMode.insertOrReplace,
             );
@@ -265,19 +276,25 @@ class NotesRepository {
   }
 
   Future<List<Category>> allCategories() {
-    return (_db.select(_db.categories)
-          ..orderBy([(c) => OrderingTerm.asc(c.sortOrder), (c) => OrderingTerm.asc(c.name)]))
+    return (_db.select(_db.categories)..orderBy([
+          (c) => OrderingTerm.asc(c.sortOrder),
+          (c) => OrderingTerm.asc(c.name),
+        ]))
         .get();
   }
 
   Stream<List<Category>> watchCategories() {
-    return (_db.select(_db.categories)
-          ..orderBy([(c) => OrderingTerm.asc(c.sortOrder), (c) => OrderingTerm.asc(c.name)]))
+    return (_db.select(_db.categories)..orderBy([
+          (c) => OrderingTerm.asc(c.sortOrder),
+          (c) => OrderingTerm.asc(c.name),
+        ]))
         .watch();
   }
 
   Future<int> createCategory(String name) {
-    return _db.into(_db.categories).insert(
+    return _db
+        .into(_db.categories)
+        .insert(
           CategoriesCompanion.insert(
             name: name.trim(),
             createdAt: DateTime.now(),
@@ -294,19 +311,30 @@ class NotesRepository {
 
   /// One-time demo seed (idempotent checks by category names).
   Future<void> seedIfEmpty() async {
-    final countQuery = _db.selectOnly(_db.categories)..addColumns([_db.categories.id.count()]);
+    final countQuery = _db.selectOnly(_db.categories)
+      ..addColumns([_db.categories.id.count()]);
     final row = await countQuery.getSingle();
     final n = row.read(_db.categories.id.count()) ?? 0;
     if (n > 0) return;
     final now = DateTime.now();
-    await _db.into(_db.categories).insert(
-          CategoriesCompanion.insert(name: 'Ideas', sortOrder: const Value(0), createdAt: now),
+    await _db
+        .into(_db.categories)
+        .insert(
+          CategoriesCompanion.insert(
+            name: 'Ideas',
+            sortOrder: const Value(0),
+            createdAt: now,
+          ),
         );
-    await _db.into(_db.categories).insert(
-          CategoriesCompanion.insert(name: 'Tasks', sortOrder: const Value(1), createdAt: now),
+    await _db
+        .into(_db.categories)
+        .insert(
+          CategoriesCompanion.insert(
+            name: 'Tasks',
+            sortOrder: const Value(1),
+            createdAt: now,
+          ),
         );
-    await _db.into(_db.tags).insert(
-          TagsCompanion.insert(name: 'important'),
-        );
+    await _db.into(_db.tags).insert(TagsCompanion.insert(name: 'important'));
   }
 }

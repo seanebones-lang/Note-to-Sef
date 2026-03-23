@@ -1,0 +1,4 @@
+# Optional: set apple_id or use App Store Connect API key (see Fastfile env vars).
+# apple_id("you@example.com")
+
+# json_key_file(ENV["PLAY_CONSOLE_JSON_KEY"]) # path to Google Play service account JSON

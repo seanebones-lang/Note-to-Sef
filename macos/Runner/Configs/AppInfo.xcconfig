@@ -8,10 +8,10 @@
 PRODUCT_NAME = note_to_self
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.notetoself.noteToSelf
+PRODUCT_BUNDLE_IDENTIFIER = online.nextelevenstudios.notetoself
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2026 com.notetoself. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2026 NextEleven Studios. All rights reserved.
 
 // Required for speech_to_text (TCC will abort without these in the built Info.plist)
 INFOPLIST_KEY_NSMicrophoneUsageDescription = Note to Self uses the microphone to turn your speech into text notes.
