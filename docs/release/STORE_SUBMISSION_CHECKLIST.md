@@ -12,9 +12,14 @@ Use this checklist for production submissions to Apple and Google.
 
 ## Legal and Policy
 
-- [ ] Publish Privacy Policy URL for store listing.
-- [ ] Publish EULA / Terms URL if required by your release process.
-- [ ] Confirm support contact URL/email in listing.
+- [ ] Publish Privacy Policy URL for store listing:
+  - [ ] `https://seanebones-lang.github.io/Note-to-Sef/privacy-policy.html`
+- [ ] Publish EULA / Terms URL if required by your release process:
+  - [ ] `https://seanebones-lang.github.io/Note-to-Sef/eula.html`
+- [ ] Confirm support URL in listing:
+  - [ ] `https://seanebones-lang.github.io/Note-to-Sef/support-policy.html`
+- [ ] Keep legal docs landing page available:
+  - [ ] `https://seanebones-lang.github.io/Note-to-Sef/`
 - [ ] Ensure Data Safety (Google Play) and Privacy Nutrition (Apple) answers match actual app behavior.
 
 ## App Assets
